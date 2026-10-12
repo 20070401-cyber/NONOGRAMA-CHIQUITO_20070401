@@ -5,7 +5,6 @@ import {
     crearEstadoInicial,
     interactuarCelda,
     moverCursor,
-    type EstadoJuego,
 } from "../src/logica";
 
 const SOLUCION = [
@@ -71,6 +70,22 @@ describe("reglas del nonograma", () => {
         expect(interactuarCelda(estado, 0, 1)).toBe(false);
     });
 
+    it("permite completar el recorrido de principio a fin y alcanzar la victoria", () => {
+        const estado = crearEstadoInicial();
+
+        for (let fila = 0; fila < SOLUCION.length; fila += 1) {
+            for (let columna = 0; columna < SOLUCION[fila].length; columna += 1) {
+                expect(interactuarCelda(estado, fila, columna)).toBe(true);
+                if (!SOLUCION[fila][columna]) {
+                    expect(interactuarCelda(estado, fila, columna)).toBe(true);
+                }
+            }
+        }
+
+        expect(comprobarResultado(estado)).toBe(true);
+        expect(estado.resultado).toBe("victoria");
+    });
+
     it("gana con el tablero completo correcto y pierde al superar tres errores", () => {
         const estadoGanador = crearEstadoInicial();
         estadoGanador.tablero = SOLUCION.map((fila) =>
@@ -89,21 +104,5 @@ describe("reglas del nonograma", () => {
         expect(estadoPerdedor.errores).toBe(4);
         expect(estadoPerdedor.resultado).toBe("derrota");
         expect(comprobarResultado(estadoPerdedor)).toBe(false);
-    });
-
-    it("permite completar el recorrido de principio a fin y alcanzar la victoria", () => {
-        const estado = crearEstadoInicial();
-
-        for (let fila = 0; fila < SOLUCION.length; fila += 1) {
-            for (let columna = 0; columna < SOLUCION[fila].length; columna += 1) {
-                expect(interactuarCelda(estado, fila, columna)).toBe(true);
-                if (!SOLUCION[fila][columna]) {
-                    expect(interactuarCelda(estado, fila, columna)).toBe(true);
-                }
-            }
-        }
-
-        expect(comprobarResultado(estado)).toBe(true);
-        expect(estado.resultado).toBe("victoria");
     });
 });
