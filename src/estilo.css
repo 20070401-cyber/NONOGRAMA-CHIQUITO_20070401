@@ -609,3 +609,75 @@ h1 {
         transition-duration: 0.01ms !important;
     }
 }
+
+.datos-cabecera {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px 16px;
+}
+
+.temporizador {
+    color: var(--tinta-suave);
+    font-size: 16px;
+    font-variant-numeric: tabular-nums;
+}
+
+.temporizador strong {
+    color: var(--tinta);
+}
+
+.modos-celda {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 18px;
+}
+
+.modo-celda {
+    min-width: 44px;
+    min-height: 48px;
+    padding: 10px 14px;
+    border: 2px solid var(--tinta);
+    border-radius: 3px;
+    color: var(--tinta);
+    background: var(--papel);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.modo-celda.activo {
+    color: #fff;
+    background: var(--tinta);
+}
+
+.modo-celda:focus-visible {
+    outline: 4px solid var(--acento);
+    outline-offset: 3px;
+}
+
+.final-victoria .figura-final {
+    animation: brillo-victoria 850ms ease-in-out 2;
+}
+
+@keyframes brillo-victoria {
+    50% {
+        box-shadow: 0 0 24px 8px rgba(23, 107, 72, 0.45);
+        transform: scale(1.035);
+    }
+}
+
+@media (max-width: 520px) {
+    .datos-cabecera {
+        gap: 6px 10px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .final-victoria .figura-final {
+        animation: none;
+    }
+}

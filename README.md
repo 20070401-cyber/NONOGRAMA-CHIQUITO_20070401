@@ -9,8 +9,8 @@ Un juego de lógica rápida donde pintás casillas de una cuadrícula siguiendo 
 ## 2. Qué hace y cómo se usa
 
 Iniciá una partida y seguí las pistas de filas y columnas del tablero 5 × 5.  
-Tocá celdas para alternar sus estados; con las flechas movés el cursor y con espacio accionás la celda.  
-Usá «Comprobar dibujo» para validar; un cuarto error termina la partida y actualmente bloquea el recorrido de victoria.
+Elegí Pintar o Marcar X y tocá una celda; con flechas movés el cursor y con espacio aplicás el modo elegido.  
+Usá «Comprobar dibujo» o Enter/C para validar; la partida termina al resolver el tablero o al superar tres errores.
 
 ## 3. Enlace
 

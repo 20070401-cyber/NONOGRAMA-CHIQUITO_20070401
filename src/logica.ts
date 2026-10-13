@@ -5,10 +5,13 @@ export const CONFIG = {
     erroresIniciales: 0, // Unidad: errores
     indiceInicial: 0, // Unidad: índices
     paso: 1, // Unidad: posiciones por avance
+    segundosPorMinuto: 60, // Unidad: segundos
+    milisegundosPorSegundo: 1000, // Unidad: milisegundos
 } as const;
 
 export type EstadoCelda = "sin_resolver" | "pintada" | "tachada";
 export type Direccion = "arriba" | "abajo" | "izquierda" | "derecha";
+export type ModoCelda = "pintar" | "tachar";
 export type ResultadoPartida = "en_curso" | "victoria" | "derrota";
 
 export interface EstadoJuego {
@@ -16,6 +19,7 @@ export interface EstadoJuego {
     errores: number;
     filaSeleccionada: number;
     columnaSeleccionada: number;
+    modoCelda: ModoCelda;
     resultado: ResultadoPartida;
 }
 
@@ -41,6 +45,7 @@ export function crearEstadoInicial(): EstadoJuego {
         errores: CONFIG.erroresIniciales,
         filaSeleccionada: CONFIG.indiceInicial,
         columnaSeleccionada: CONFIG.indiceInicial,
+        modoCelda: "pintar",
         resultado: "en_curso",
     };
 }
@@ -88,6 +93,15 @@ export function moverCursor(estado: EstadoJuego, direccion: Direccion): boolean 
     return true;
 }
 
+export function seleccionarModo(estado: EstadoJuego, modo: ModoCelda): boolean {
+    if (estado.resultado !== "en_curso") {
+        return false;
+    }
+
+    estado.modoCelda = modo;
+    return true;
+}
+
 export function interactuarCelda(
     estado: EstadoJuego,
     fila: number,
@@ -99,18 +113,21 @@ export function interactuarCelda(
 
     const estadoActual = estado.tablero[fila][columna];
 
-    if (estadoActual === "sin_resolver") {
-        estado.tablero[fila][columna] = "pintada";
-        if (!SOLUCION[fila][columna]) {
-            estado.errores += CONFIG.paso;
-            if (estado.errores > CONFIG.erroresMaximos) {
-                estado.resultado = "derrota";
+    if (estado.modoCelda === "pintar") {
+        if (estadoActual === "pintada") {
+            estado.tablero[fila][columna] = "sin_resolver";
+        } else {
+            estado.tablero[fila][columna] = "pintada";
+            if (!SOLUCION[fila][columna]) {
+                estado.errores += CONFIG.paso;
+                if (estado.errores > CONFIG.erroresMaximos) {
+                    estado.resultado = "derrota";
+                }
             }
         }
-    } else if (estadoActual === "pintada") {
-        estado.tablero[fila][columna] = "tachada";
     } else {
-        estado.tablero[fila][columna] = "sin_resolver";
+        estado.tablero[fila][columna] =
+            estadoActual === "tachada" ? "sin_resolver" : "tachada";
     }
 
     return true;
